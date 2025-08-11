@@ -31,39 +31,32 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        System.out.println("🔍 SecurityFilter: " + request.getMethod() + " " + request.getRequestURI());
-
         String authHeader = request.getHeader("Authorization");
-        System.out.println("🔍 Authorization header: " + authHeader);
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7); // quita "Bearer "
             try {
                 String correo = tokenService.getSubject(token);
-                System.out.println("✅ Token verificado. subject = " + correo);
 
                 var usuario = usuarioRepository.findByCorreoElectronico(correo).orElse(null);
-                System.out.println("👤 Usuario encontrado? " + (usuario != null));
 
                 if (usuario != null) {
                     var authorities = usuario.getPerfiles()
                             .stream()
                             .map(p -> new SimpleGrantedAuthority(p.getNombre())) // p.ej. "ROLE_USER"
                             .toList();
-                    System.out.println("🔑 Authorities: " + authorities);
 
                     var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     System.out.println("✅ Authentication seteada en SecurityContext");
                 } else {
-                    System.out.println("⚠️ No se encontró el usuario en DB a partir del subject del token.");
                 }
             } catch (Exception e) {
-                System.out.println("❌ Error verificando token: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+                System.out.println("Error verificando token: " + e.getClass().getSimpleName() + " - " + e.getMessage());
             }
         } else {
-            System.out.println("ℹ️ Sin header Authorization o formato no Bearer. Continuando sin autenticar.");
+            System.out.println("Sin header Authorization o formato no Bearer. Continuando sin autenticar.");
         }
 
         filterChain.doFilter(request, response);

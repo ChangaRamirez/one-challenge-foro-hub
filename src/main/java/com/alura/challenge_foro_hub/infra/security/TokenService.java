@@ -24,7 +24,6 @@ public class TokenService {
                 .withExpiresAt(exp)
                 .sign(Algorithm.HMAC256(apiSecret));
 
-        System.out.println("🎫 Token emitido para " + correoElectronico + " exp=" + exp);
         return token;
     }
 

@@ -101,4 +101,16 @@ public class TopicoController {
 
         return ResponseEntity.ok(new DatosDetalleTopico(topico));
     }
+
+    // DELETE /topicos/{id} -> elimina por id
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        var existe = repository.existsById(id);
+        if (!existe) {
+            return ResponseEntity.notFound().build(); // 404 si no existe
+        }
+        repository.deleteById(id); // elimina el registro
+        return ResponseEntity.noContent().build();    // 204
+    }
 }
