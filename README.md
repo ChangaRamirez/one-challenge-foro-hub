@@ -30,8 +30,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/ChangaRamirez/challenge-literalura">
-    <img src="https://github.com/ChangaRamirez/one-challenge-literalura/blob/main/assets/images/literalura-logo.png" alt="Logo" width="300" height="120">
+  <a href="https://github.com/ChangaRamirez/one-challenge-foro-hub">
+    <img src="https://github.com/ChangaRamirez/one-challenge-foro-hub/blob/main/assets/images/forohub-logo.png" alt="Logo" width="300" height="120">
   </a>
 
 <h3 align="center">Foro Hub</h3>
@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Acerca Del Proyecto
 
-<img src="https://github.com/ChangaRamirez/one-challenge-literalura/blob/main/assets/images/literalura-logo-transp.png" alt="Logo" width="500">
+<!--<img src="https://github.com/ChangaRamirez/one-challenge-literalura/blob/main/assets/images/literalura-logo-transp.png" alt="Logo" width="500">-->
 
 <!--Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `ChangaRamirez`, `one-challenge-amigo-secreto`, `twitter_handle`, `linkedin_username`, `hotmail`, `laloraco`, `project_title`, `project_description`, `project_license`-->
 
