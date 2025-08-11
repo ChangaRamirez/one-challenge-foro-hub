@@ -1,16 +1,20 @@
--- Usuarios y perfiles
+-- Perfiles
 CREATE TABLE perfiles (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  nombre VARCHAR(100) NOT NULL
+  id BIGINT AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id)
 );
 
+-- Usuarios
 CREATE TABLE usuarios (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id BIGINT AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
   correo_electronico VARCHAR(150) NOT NULL UNIQUE,
-  contrasena VARCHAR(255) NOT NULL
+  contrasena VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 
+-- Relación usuarios-perfiles (PK compuesta)
 CREATE TABLE usuarios_perfiles (
   usuario_id BIGINT NOT NULL,
   perfil_id BIGINT NOT NULL,
@@ -21,33 +25,33 @@ CREATE TABLE usuarios_perfiles (
 
 -- Cursos
 CREATE TABLE cursos (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id BIGINT AUTO_INCREMENT,
   nombre VARCHAR(150) NOT NULL,
-  categoria VARCHAR(100) NOT NULL
+  categoria VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id)
 );
 
 -- Tópicos
 CREATE TABLE topicos (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  titulo VARCHAR(200) NOT NULL,
+  id BIGINT AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
   mensaje TEXT NOT NULL,
+  autor VARCHAR(255) NOT NULL,
+  curso VARCHAR(255) NOT NULL,
   fecha_creacion DATETIME NOT NULL,
-  status VARCHAR(50) NOT NULL,
-  autor_id BIGINT NOT NULL,
-  curso_id BIGINT NOT NULL,
-  CONSTRAINT fk_topico_autor FOREIGN KEY (autor_id) REFERENCES usuarios(id),
-  CONSTRAINT fk_topico_curso FOREIGN KEY (curso_id) REFERENCES cursos(id),
-  INDEX idx_topicos_fecha (fecha_creacion)
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_titulo_mensaje (titulo, mensaje(255))
 );
 
 -- Respuestas
 CREATE TABLE respuestas (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id BIGINT AUTO_INCREMENT,
   mensaje TEXT NOT NULL,
   topico_id BIGINT NOT NULL,
   fecha_creacion DATETIME NOT NULL,
   autor_id BIGINT NOT NULL,
   solucion BOOLEAN NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (id),
   CONSTRAINT fk_resp_topico FOREIGN KEY (topico_id) REFERENCES topicos(id),
   CONSTRAINT fk_resp_autor FOREIGN KEY (autor_id) REFERENCES usuarios(id),
   INDEX idx_respuestas_topico (topico_id)
