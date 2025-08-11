@@ -6,6 +6,7 @@ import com.alura.challenge_foro_hub.domain.topico.DatosRegistroTopico;
 import com.alura.challenge_foro_hub.domain.topico.DatosRespuestaTopico;
 import com.alura.challenge_foro_hub.domain.topico.DTO.DatosListadoTopico;
 import com.alura.challenge_foro_hub.domain.topico.DTO.DatosDetalleTopico;
+import com.alura.challenge_foro_hub.domain.topico.DTO.DatosActualizacionTopico;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class TopicoController {
         this.repository = repository;
     }
 
-    // POST /topicos -> 201 + Location
+    // POST /topicos -> 201 Created + Location
     @PostMapping
     @Transactional
     public ResponseEntity<DatosRespuestaTopico> registrar(@RequestBody @Valid DatosRegistroTopico datos,
@@ -75,6 +76,29 @@ public class TopicoController {
     public ResponseEntity<DatosDetalleTopico> detallar(@PathVariable Long id) {
         var topico = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tópico no encontrado"));
+        return ResponseEntity.ok(new DatosDetalleTopico(topico));
+    }
+
+    // PUT /topicos/{id} -> actualizar (mismas reglas que registro)
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DatosDetalleTopico> actualizar(@PathVariable Long id,
+                                                         @RequestBody @Valid DatosActualizacionTopico datos) {
+        var topicoOpt = repository.findById(id);
+        if (topicoOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (repository.existsByTituloAndMensajeAndIdNot(datos.titulo(), datos.mensaje(), id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tópico duplicado (título + mensaje).");
+        }
+
+        var topico = topicoOpt.get();
+        topico.setTitulo(datos.titulo());
+        topico.setMensaje(datos.mensaje());
+        topico.setAutor(datos.autor());
+        topico.setCurso(datos.curso());
+
         return ResponseEntity.ok(new DatosDetalleTopico(topico));
     }
 }
